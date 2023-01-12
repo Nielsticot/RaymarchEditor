@@ -18,8 +18,8 @@ function App() {
       <h1>Raymarch Renderer</h1>
 
       <div className="row">
-        <Surface width={300} height={300}>
-          <RaymarchRenderer blue={0.5}/>
+        <Surface width={600} height={400}>
+          <RaymarchRenderer />
         </Surface>
       </div>
     </div>
