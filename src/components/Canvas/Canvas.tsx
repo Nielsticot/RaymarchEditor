@@ -1,25 +1,14 @@
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { RaymarchRenderer } from "../RaymarchRenderer";
-import { RaymarchNode, RaymarchNodeProps, SphereNode, UnionNode, Vector3 } from "../../types";
+import { Vector3 } from "../../types";
+import { useSceneStore } from "../../store";
 
 export function Canvas() {
-  const scene: RaymarchNode<RaymarchNodeProps> = useMemo(() => new UnionNode({
-    name: "root",
-    left: new SphereNode({
-      name: "sphere1",
-      position: new Vector3(-0.5, 0.0, 0.0),
-      radius: 1.0,
-    }),
-    right: new SphereNode({
-      name: "sphere2",
-      position: new Vector3(0.5, 0.0, 0.0),
-      radius: 1.1,
-    }),
-  }), []);
+  const sceneStore = useSceneStore();
 
-  const sdf = useMemo(() => scene.getSdf({
+  const sdf = useMemo(() => sceneStore.scene.getSdf({
     position: new Vector3(0, 1, 4),
-  }), [scene]);
+  }), [sceneStore.scene]);
 
   return <RaymarchRenderer sdf={sdf} />;
 }
