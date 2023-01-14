@@ -1,10 +1,10 @@
 import { Canvas } from "./components/Canvas";
 import { AppShell, Header, Navbar, Space, Title } from "@mantine/core";
 import { SceneTree } from "./components/SceneTree";
-import { useSceneStore } from "./store";
+import { useRaymarchEditorStore } from "./store";
 
 export function App() {
-  const sceneStore = useSceneStore();
+  const sceneStore = useRaymarchEditorStore();
 
   return (
     <AppShell

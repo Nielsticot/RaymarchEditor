@@ -15,6 +15,8 @@ export function createRaymarchShader(sdf: string) {
     precision highp float;
     uniform vec2 resolution; // Width & height of the shader
     uniform float time; // Time elapsed
+    uniform vec3 cameraPosition;
+    uniform vec3 cameraRotation;
 
     // Constants
     #define PI 3.1415925359
@@ -76,8 +78,15 @@ export function createRaymarchShader(sdf: string) {
     {
         vec2 uv = (gl_FragCoord.xy-.5*resolution.xy)/resolution.y;
         
-        vec3 ro = vec3(0,1,0); // Ray Origin/Camera
+        vec3 ro = cameraPosition; // Ray Origin/Camera
+
         vec3 rd = normalize(vec3(uv.x,uv.y,1)); // Ray Direction
+
+        mat3 rotationMatrix = mat3(cos(cameraRotation.y) * cos(cameraRotation.z), -sin(cameraRotation.z), cos(cameraRotation.z) * sin(cameraRotation.y),
+            sin(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z) + cos(cameraRotation.x) * sin(cameraRotation.z), cos(cameraRotation.x) * cos(cameraRotation.z) - sin(cameraRotation.x) * sin(cameraRotation.y) * sin(cameraRotation.z), -cos(cameraRotation.y) * sin(cameraRotation.x),
+            sin(cameraRotation.x) * sin(cameraRotation.z) - cos(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z), cos(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z) + sin(cameraRotation.x) * sin(cameraRotation.z), cos(cameraRotation.x) * cos(cameraRotation.y));
+
+        rd = rotationMatrix * rd;
         
         float d = RayMarch(ro,rd); // Distance
         
@@ -85,8 +94,8 @@ export function createRaymarchShader(sdf: string) {
         float dif = GetLight(p); // Diffuse lighting
         d*= .2;
         vec3 color = vec3(dif);
-        //color += GetNormal(p);
-        //float color = GetLight(p);
+        color += GetNormal(p);
+        // float color = GetLight(p);
 
         // Set the output color
         gl_FragColor = vec4(color,1.0);
