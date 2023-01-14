@@ -6,10 +6,10 @@ export function NumberEditor({ value, onChange }: ValueEditorProps<number>) {
         <Text size="xs">{value.toPrecision(3)}</Text>
         <Slider
             value={value}
-            onChangeEnd={onChange}
-            min={-20}
-            max={20}
-            step={0.05}
+            onChange={onChange}
+            min={-5}
+            max={5}
+            step={0.01}
             size="xs"
             w="100%"
         />

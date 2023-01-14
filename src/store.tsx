@@ -15,18 +15,18 @@ export const useRaymarchEditorStore = create<SceneStore>((set) => ({
             position: new Vector3(-0.5, 0.0, 0.0),
             radius: 1.0,
         }),
-        right: new SphereNode({
-            name: "Sphere 2",
+        right: new BoxNode({
+            name: "Box 1",
             position: new Vector3(0.5, 0.0, 0.0),
-            radius: 1.1,
+            size: new Vector3(1, 1, 0.2),
         }),
     }),
     camera: {
         position: new Vector3(0, 1, 0),
         rotation: new Vector3(0, 0, 0),
     },
-    setCamera: (camera) => {
-        console.log(camera)
-        set({ camera })
+    setCamera: (cam) => {
+        console.log(cam)
+        set({ camera: cam })
     },
 }))

@@ -74,6 +74,39 @@ export function createRaymarchShader(sdf: string) {
         return dif;
     }
 
+    // Rotation matrix around the X axis.
+    mat3 rotateX(float theta) {
+        float c = cos(theta);
+        float s = sin(theta);
+        return mat3(
+            vec3(1, 0, 0),
+            vec3(0, c, -s),
+            vec3(0, s, c)
+        );
+    }
+
+    // Rotation matrix around the Y axis.
+    mat3 rotateY(float theta) {
+        float c = cos(theta);
+        float s = sin(theta);
+        return mat3(
+            vec3(c, 0, s),
+            vec3(0, 1, 0),
+            vec3(-s, 0, c)
+        );
+    }
+
+    // Rotation matrix around the Z axis.
+    mat3 rotateZ(float theta) {
+        float c = cos(theta);
+        float s = sin(theta);
+        return mat3(
+            vec3(c, -s, 0),
+            vec3(s, c, 0),
+            vec3(0, 0, 1)
+        );
+    }
+
     void main()
     {
         vec2 uv = (gl_FragCoord.xy-.5*resolution.xy)/resolution.y;
@@ -82,11 +115,9 @@ export function createRaymarchShader(sdf: string) {
 
         vec3 rd = normalize(vec3(uv.x,uv.y,1)); // Ray Direction
 
-        mat3 rotationMatrix = mat3(cos(cameraRotation.y) * cos(cameraRotation.z), -sin(cameraRotation.z), cos(cameraRotation.z) * sin(cameraRotation.y),
-            sin(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z) + cos(cameraRotation.x) * sin(cameraRotation.z), cos(cameraRotation.x) * cos(cameraRotation.z) - sin(cameraRotation.x) * sin(cameraRotation.y) * sin(cameraRotation.z), -cos(cameraRotation.y) * sin(cameraRotation.x),
-            sin(cameraRotation.x) * sin(cameraRotation.z) - cos(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z), cos(cameraRotation.x) * sin(cameraRotation.y) * cos(cameraRotation.z) + sin(cameraRotation.x) * sin(cameraRotation.z), cos(cameraRotation.x) * cos(cameraRotation.y));
-
-        rd = rotationMatrix * rd;
+        rd *= rotateX(cameraRotation.x);
+        rd *= rotateY(cameraRotation.y);
+        rd *= rotateZ(cameraRotation.z);
         
         float d = RayMarch(ro,rd); // Distance
         
