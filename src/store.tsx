@@ -4,6 +4,7 @@ import { BoxNode, CameraProps, RaymarchNode, RaymarchNodeProps, SphereNode, Unio
 interface SceneStore {
     scene: RaymarchNode<RaymarchNodeProps>,
     camera: CameraProps,
+    setCamera: (camera: CameraProps) => void,
 }
 
 export const useRaymarchEditorStore = create<SceneStore>((set) => ({
@@ -21,7 +22,11 @@ export const useRaymarchEditorStore = create<SceneStore>((set) => ({
         }),
     }),
     camera: {
-        position: new Vector3(0, 0, 0),
+        position: new Vector3(0, 1, 0),
         rotation: new Vector3(0, 0, 0),
-    }
+    },
+    setCamera: (camera) => {
+        console.log(camera)
+        set({ camera })
+    },
 }))

@@ -3,11 +3,11 @@ import { useRayMarchShader } from "./shader";
 import { Surface } from "gl-react-dom";
 import { useRaymarchEditorStore } from "../../store";
 
-interface Props {
+interface RayMarchRendererProps {
   sdf: string,
 }
 
-export function RaymarchRenderer({ sdf }: Props) {
+export function RaymarchRenderer({ sdf }: RayMarchRendererProps) {
   const store = useRaymarchEditorStore();
   const shaders = useRayMarchShader(sdf);
 

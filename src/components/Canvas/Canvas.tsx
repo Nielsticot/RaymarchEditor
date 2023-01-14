@@ -4,11 +4,11 @@ import { Vector3 } from "../../types";
 import { useRaymarchEditorStore } from "../../store";
 
 export function Canvas() {
-  const sceneStore = useRaymarchEditorStore();
+  const store = useRaymarchEditorStore();
 
-  const sdf = useMemo(() => sceneStore.scene.getSdf({
+  const sdf = useMemo(() => store.scene.getSdf({
     position: new Vector3(0, 1, 4),
-  }), [sceneStore.scene]);
+  }), [store.scene]);
 
   return <RaymarchRenderer sdf={sdf} />;
 }
