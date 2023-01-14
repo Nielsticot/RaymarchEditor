@@ -1,13 +1,16 @@
 import { GLSL } from "gl-react";
-import { sdfOperators } from "./sdfOperators";
-import { sdfPrimitive } from "./sdfPrimitives";
+import { getRaymarchNodes } from "../../../utils/raymarchNodes";
+
+const sdfFunctions = getRaymarchNodes()
+    .map((node) => node.shaderFunction)
+    .join('');
 
 /** 
  * Creates a GLSL shader that use raymarching to render
  * a 3D scene described by a signed distance function
  * @param sdfScene - GLSL function with prototype 'float GetDist(vec3 p)'
  */
-export function createRaymarchShader(sdfScene: string) {
+export function createRaymarchShader(sdf: string) {
     return GLSL`
     precision highp float;
     uniform vec2 resolution; // Width & height of the shader
@@ -20,9 +23,11 @@ export function createRaymarchShader(sdfScene: string) {
     #define MAX_DIST 100. // Max Raymarching distance
     #define SURF_DIST .01 // Surface Distance
 
-    ${sdfOperators}
-    ${sdfPrimitive}
-    ${sdfScene}
+    ${sdfFunctions}
+
+    float GetDist(vec3 p) {
+        return ${sdf};
+    }
 
     float RayMarch(vec3 ro, vec3 rd) 
     {

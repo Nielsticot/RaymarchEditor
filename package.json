@@ -13,6 +13,7 @@
     "@emotion/react": "^11.10.5",
     "@mantine/core": "^5.10.0",
     "@mantine/hooks": "^5.10.0",
+    "@tabler/icons": "^1.119.0",
     "@tauri-apps/api": "^1.2.0",
     "gl-react": "^5.2.0",
     "gl-react-dom": "^5.2.1",

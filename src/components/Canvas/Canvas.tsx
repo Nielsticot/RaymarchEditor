@@ -1,45 +1,25 @@
-import { useState } from "react";
+import { useMemo, useEffect } from "react";
 import { RaymarchRenderer } from "../RaymarchRenderer";
-import { Button, Container, Stack } from "@mantine/core";
-
-const planeSdf = `
-  float GetDist(vec3 p) {
-    float planeDist = p.y;
-    return planeDist;
-  }`;
-
-const sphereSdf = `
-  float GetDist(vec3 p) {
-    vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
-    float sphereDist = length(p-s.xyz) - s.w;
-    float planeDist  = p.y;
-    float d = min(sphereDist,planeDist);
-    return d;
-  }`;
-
-const cubeSdf = `
-  float GetDist(vec3 p) {
-    vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
-    float cubeDist = length(max(abs(p - s.xyz) - s.w, 0.0));
-    float planeDist  = p.y;
-    float d = min(cubeDist,planeDist);
-    return d;
-  }`;
+import { RaymarchNode, RaymarchNodeProps, SphereNode, UnionNode, Vector3 } from "../../types";
 
 export function Canvas() {
-  const [sdf, setSdf] = useState(planeSdf);
+  const scene: RaymarchNode<RaymarchNodeProps> = useMemo(() => new UnionNode({
+    name: "root",
+    left: new SphereNode({
+      name: "sphere1",
+      position: new Vector3(-0.5, 0.0, 0.0),
+      radius: 1.0,
+    }),
+    right: new SphereNode({
+      name: "sphere2",
+      position: new Vector3(0.5, 0.0, 0.0),
+      radius: 1.1,
+    }),
+  }), []);
 
-  return <Stack spacing="md">
-    <Container>
-      <Button.Group>
-        <Button variant="default" onClick={() => setSdf(planeSdf)}>Reset</Button>
-        <Button variant="default" onClick={() => setSdf(sphereSdf)}>Sphere</Button>
-        <Button variant="default" onClick={() => setSdf(cubeSdf)}>Cube</Button>
-      </Button.Group>
-    </Container>
+  const sdf = useMemo(() => scene.getSdf({
+    position: new Vector3(0, 1, 4),
+  }), [scene]);
 
-    <Container>
-      <RaymarchRenderer sdf={sdf} />
-    </Container>
-  </Stack>;
+  return <RaymarchRenderer sdf={sdf} />;
 }
