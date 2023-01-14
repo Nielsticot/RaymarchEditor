@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { RaymarchRenderer } from "../RaymarchRenderer";
-import { ButtonGroup } from "@blueprintjs/core";
-import { Button } from "@blueprintjs/core/lib/esm/components";
+import { Button, Container, Stack } from "@mantine/core";
 
 const planeSdf = `
   float GetDist(vec3 p) {
@@ -28,28 +27,19 @@ const cubeSdf = `
   }`;
 
 export function Canvas() {
-    const [sdf, setSdf] = useState(planeSdf);
+  const [sdf, setSdf] = useState(planeSdf);
 
-    return <>
-        <div>
-            <ButtonGroup minimal={true}>
-                <Button
-                    icon="database"
-                    onClick={() => setSdf(planeSdf)}
-                >Reset</Button>
-                <Button
-                    icon="function"
-                    onClick={() => setSdf(cubeSdf)}
-                >Cube</Button>
-                <Button
-                    icon="function"
-                    onClick={() => setSdf(sphereSdf)}
-                >Sphere</Button>
-            </ButtonGroup>
-        </div>
+  return <Stack spacing="md">
+    <Container>
+      <Button.Group>
+        <Button variant="default" onClick={() => setSdf(planeSdf)}>Reset</Button>
+        <Button variant="default" onClick={() => setSdf(sphereSdf)}>Sphere</Button>
+        <Button variant="default" onClick={() => setSdf(cubeSdf)}>Cube</Button>
+      </Button.Group>
+    </Container>
 
-        <div>
-            <RaymarchRenderer sdf={sdf} />
-        </div>
-    </>;
+    <Container>
+      <RaymarchRenderer sdf={sdf} />
+    </Container>
+  </Stack>;
 }
