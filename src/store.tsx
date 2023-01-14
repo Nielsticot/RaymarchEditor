@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { BoxNode, CameraProps, RaymarchNode, RaymarchNodeProps, SphereNode, UnionNode, Vector3 } from './types'
+import { BoxNode, CameraProps, RaymarchNode, RaymarchNodeProps, SmoothUnionNode, SphereNode, UnionNode, Vector3 } from './types'
 
 interface SceneStore {
     scene: RaymarchNode<RaymarchNodeProps>,
@@ -8,17 +8,26 @@ interface SceneStore {
 }
 
 export const useRaymarchEditorStore = create<SceneStore>((set) => ({
-    scene: new UnionNode({
-        name: "Union",
+    scene: new SmoothUnionNode({
+        name: "Smooth Union",
+        smooth: 0.5,
         left: new SphereNode({
             name: "Sphere 1",
             position: new Vector3(-0.5, 0.0, 0.0),
             radius: 1.0,
         }),
-        right: new BoxNode({
-            name: "Box 1",
-            position: new Vector3(0.5, 0.0, 0.0),
-            size: new Vector3(1, 1, 0.2),
+        right: new UnionNode({
+            name: "Union",
+            left: new BoxNode({
+                name: "Box 1",
+                position: new Vector3(0.5, 0.0, 0.0),
+                size: new Vector3(1, 1, 0.2),
+            }),
+            right: new SphereNode({
+                name: "Small Sphere",
+                position: new Vector3(-1.5, 0.3, -0.3),
+                radius: 0.6,
+            })
         }),
     }),
     camera: {

@@ -50,9 +50,7 @@ export function App() {
     //   </Stack>
     // </Aside>}
     >
-      <Center>
-        <Canvas />
-      </Center>
+      <Canvas />
     </AppShell>
   );
 }
