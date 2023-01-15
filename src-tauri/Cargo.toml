@@ -1,8 +1,8 @@
 [package]
 name = "raymarch-editor"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A 3D editor with raymarching based rendering"
+authors = ["Niels Boussion"]
 license = ""
 repository = ""
 edition = "2021"
