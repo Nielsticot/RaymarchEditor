@@ -35,12 +35,11 @@ struct Cube {
 }
 
 trait SdfComposer {
-    const SHADER: &'static str;
     fn compose_sdf(self) -> String;
 }
 
 macro_rules! handle_nodes {
-    ($name:ident, $($variant:ident),+) => {
+    ($name:ident, $([$variant:ident, $shader_path:expr]),+) => {
         #[derive(TS)]
         #[ts(export, export_to = "../src/bindings/")]
         pub enum $name {
@@ -48,15 +47,16 @@ macro_rules! handle_nodes {
         }
 
         impl SdfComposer for $name {
-            const SHADER: &'static str = concat!($(stringify!($variant::SHADER), " "),*);
             fn compose_sdf(self) -> String {
                 match self {
                     $($name::$variant(x) => x.compose_sdf(),)+
                 }
             }
         }
+
+        pub static SHADER_FUNCTIONS: &str = concat!($(include_str!($shader_path), )+);
     }
 }
 
-handle_nodes!(Node, Sphere, Union);
+handle_nodes!(Node, [Sphere, "sphere.glsl"], [Union, "union.glsl"]);
 // handle_nodes!(Node, Union, Difference, Intersect, Cube, Sphere);

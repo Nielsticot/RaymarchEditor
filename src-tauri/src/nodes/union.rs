@@ -10,7 +10,6 @@ pub struct Union {
 }
 
 impl SdfComposer for Union {
-    const SHADER: &'static str = "union shader code";
     fn compose_sdf(self) -> String {
         return String::from("sdf()");
     }

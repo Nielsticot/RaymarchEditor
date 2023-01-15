@@ -10,7 +10,6 @@ pub struct Sphere {
 }
 
 impl SdfComposer for Sphere {
-    const SHADER: &'static str = "sphere shader code";
     fn compose_sdf(self) -> String {
         return String::from("sdf()");
     }
