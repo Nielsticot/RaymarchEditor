@@ -1,6 +1,8 @@
 use ts_rs::TS;
 
-use super::{Vector3, SdfComposer};
+use crate::types::Vector3;
+
+use super::SdfComposer;
 
 #[derive(TS)]
 #[ts(export, export_to = "../src/bindings/")]

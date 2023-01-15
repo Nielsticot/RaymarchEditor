@@ -5,35 +5,6 @@ use sphere::Sphere;
 pub mod union;
 use union::Union;
 
-#[derive(TS)]
-#[ts(export, export_to = "../src/bindings/")]
-pub struct Vector3 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-}
-
-#[derive(TS)]
-#[ts(export, export_to = "../src/bindings/")]
-struct Difference {
-    left: Box<Node>,
-    right: Box<Node>,
-}
-
-#[derive(TS)]
-#[ts(export, export_to = "../src/bindings/")]
-struct Intersect {
-    left: Box<Node>,
-    right: Box<Node>,
-}
-
-#[derive(TS)]
-#[ts(export, export_to = "../src/bindings/")]
-struct Cube {
-    size: Vector3,
-    position: Vector3,
-}
-
 trait SdfComposer {
     fn compose_sdf(self) -> String;
 }
@@ -54,9 +25,8 @@ macro_rules! handle_nodes {
             }
         }
 
-        pub static SHADER_FUNCTIONS: &str = concat!($(include_str!($shader_path), )+);
+        pub const SHADER_FUNCTIONS: &str = concat!($(include_str!($shader_path), )+);
     }
 }
 
-handle_nodes!(Node, [Sphere, "sphere.glsl"], [Union, "union.glsl"]);
-// handle_nodes!(Node, Union, Difference, Intersect, Cube, Sphere);
+handle_nodes!(Node, [Sphere, "shaders/sphere.glsl"], [Union, "shaders/union.glsl"]);
