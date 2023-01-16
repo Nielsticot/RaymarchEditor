@@ -1,10 +1,11 @@
+use serde::{Serialize, Deserialize};
 use ts_rs::TS;
 
 use crate::types::Vector3;
 
 use super::SdfComposer;
 
-#[derive(TS)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[ts(export, export_to = "../src/bindings/")]
 pub struct Sphere {
     pub radius: f32,
@@ -13,6 +14,6 @@ pub struct Sphere {
 
 impl SdfComposer for Sphere {
     fn compose_sdf(self) -> String {
-        return String::from("sdf()");
+        return format!("sdSphere({}, {})", self.position.to_glsl(), self.radius);
     }
 }

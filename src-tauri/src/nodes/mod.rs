@@ -1,17 +1,17 @@
 use ts_rs::TS;
-
+use serde::{Serialize, Deserialize};
 pub mod sphere;
 use sphere::Sphere;
 pub mod union;
 use union::Union;
 
-trait SdfComposer {
+pub trait SdfComposer {
     fn compose_sdf(self) -> String;
 }
 
 macro_rules! handle_nodes {
     ($name:ident, $([$variant:ident, $shader_path:expr]),+) => {
-        #[derive(TS)]
+        #[derive(Debug, Serialize, Deserialize, TS)]
         #[ts(export, export_to = "../src/bindings/")]
         pub enum $name {
             $( $variant($variant), )+
