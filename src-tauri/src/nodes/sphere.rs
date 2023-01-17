@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use ts_rs::TS;
 
-use crate::types::Vector3;
+use crate::vector::Vector3;
 
 use super::SdfComposer;
 
@@ -14,6 +14,6 @@ pub struct Sphere {
 
 impl SdfComposer for Sphere {
     fn compose_sdf(self) -> String {
-        return format!("sdSphere({}, {})", self.position.to_glsl(), self.radius);
+        return format!("sdSphere(p+{}, {:.10})", self.position.to_glsl(), self.radius);
     }
 }

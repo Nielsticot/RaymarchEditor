@@ -1,22 +1,24 @@
-import { Node } from "gl-react";
-import { useRayMarchShader } from "./shader";
+import { Node, ShaderDefinition, ShaderIdentifier } from "gl-react";
 import { Surface } from "gl-react-dom";
-import { useRaymarchEditorStore } from "../../store";
+import { Vector3 } from "../../bindings/Vector3";
+import { CameraProps } from "../../types";
 
 interface RayMarchRendererProps {
-  sdf: string,
+  shader: ShaderIdentifier | ShaderDefinition,
+  camera: CameraProps,
 }
 
-export function RaymarchRenderer({ sdf }: RayMarchRendererProps) {
-  const store = useRaymarchEditorStore();
-  const shaders = useRayMarchShader(sdf);
+function vector3toArray(vec: Vector3): number[] {
+  return [vec.x, vec.y, vec.z];
+}
 
+export function RaymarchRenderer({ shader, camera }: RayMarchRendererProps) {
   return <Surface width={600} height={400}>
-    <Node shader={shaders.raymarch} uniforms={{
+    <Node shader={shader} uniforms={{
       time: 1,
       resolution: [600, 400],
-      cameraPosition: store.camera.position.toArray(),
-      cameraRotation: store.camera.rotation.toArray(),
+      cameraPosition: vector3toArray(camera.position),
+      cameraRotation: vector3toArray(camera.rotation),
     }} />
   </Surface>;
 }

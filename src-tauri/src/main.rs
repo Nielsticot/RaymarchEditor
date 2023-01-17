@@ -6,7 +6,7 @@
 use nodes::Node;
 use shader::compose_shader;
 
-mod types;
+mod vector;
 mod nodes;
 mod shader;
 

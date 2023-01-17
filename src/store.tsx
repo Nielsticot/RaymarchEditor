@@ -1,41 +1,37 @@
 import { create } from 'zustand'
-import { BoxNode, CameraProps, RaymarchNode, RaymarchNodeProps, SmoothUnionNode, SphereNode, UnionNode, Vector3 } from './types'
+import { Node } from './bindings/Node'
+import { CameraProps } from './types'
+import { invoke } from '@tauri-apps/api'
+import { getShader } from './commands'
+import { Shaders, ShadersSheet } from 'gl-react'
 
 interface SceneStore {
-    scene: RaymarchNode<RaymarchNodeProps>,
+    shader: ShadersSheet | null,
+
+    scene: Node | null,
+    setScene: (scene: Node) => void,
+
     camera: CameraProps,
     setCamera: (camera: CameraProps) => void,
 }
 
 export const useRaymarchEditorStore = create<SceneStore>((set) => ({
-    scene: new SmoothUnionNode({
-        name: "Smooth Union",
-        smooth: 0.5,
-        left: new SphereNode({
-            name: "Sphere 1",
-            position: new Vector3(-0.5, 0.0, 0.0),
-            radius: 1.0,
-        }),
-        right: new UnionNode({
-            name: "Union",
-            left: new BoxNode({
-                name: "Box 1",
-                position: new Vector3(0.5, 0.0, 0.0),
-                size: new Vector3(1, 1, 0.2),
-            }),
-            right: new SphereNode({
-                name: "Small Sphere",
-                position: new Vector3(-1.5, 0.3, -0.3),
-                radius: 0.6,
-            })
-        }),
-    }),
+    shader: null,
+
+    scene: null,
+    setScene: async (scene) => {
+        set({ scene });
+        const shaderCode: string = await getShader(scene);
+        console.log(shaderCode)
+        const shader = Shaders.create({
+            raymarch: { frag: shaderCode },
+        });
+        set({ shader });
+    },
+
     camera: {
-        position: new Vector3(0, 1, 0),
-        rotation: new Vector3(0, 0, 0),
+        position: { x: 0, y: 0, z: -2 },
+        rotation: { x: 0, y: 0, z: 0 },
     },
-    setCamera: (cam) => {
-        console.log(cam)
-        set({ camera: cam })
-    },
-}))
+    setCamera: (camera) => set({ camera }),
+}));

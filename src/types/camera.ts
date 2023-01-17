@@ -1,4 +1,4 @@
-import { Vector3 } from "./vector";
+import { Vector3 } from "../bindings/Vector3";
 
 export interface CameraProps {
     position: Vector3,

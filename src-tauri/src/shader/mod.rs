@@ -1,4 +1,4 @@
-use crate::nodes::{Node, SdfComposer, SHADER_FUNCTIONS};
+use crate::{nodes::{Node, SdfComposer, SHADER_FUNCTIONS}};
 
 const SHADER: &str = include_str!("shader.glsl");
 
